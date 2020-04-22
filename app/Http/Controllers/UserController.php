@@ -3,10 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Profile;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum', ['except' => ['store']]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +21,7 @@ class UserController extends Controller
     public function index()
     {
         //
-        return User::where('is_admin', '!=', 1)->paginate(5);
+        return User::with('profile')->where('is_admin', '!=', 1)->get();
     }
 
     /**
@@ -37,6 +43,15 @@ class UserController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:5',
+            'notes' =>    'required'
+        ]);
+
+        $user = User::create($request->only(['name', 'email', 'password', 'notes']));
+        return $user;
     }
 
     /**
@@ -70,7 +85,24 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+            'company' => 'required'
+        ]);
+        
+        $user = User::find($id);
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->notes = $request->notes;
+        $user->is_approved = 1;
+        $user->save();
+
+        $profile = Profile::firstOrNew(['user_id' => $user->id]);
+        $profile->callrail = $request->company;
+        $profile->save();
+
+        return $user;
     }
 
     /**
