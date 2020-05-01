@@ -62,7 +62,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        return User::with('profile')->where('id', $id)->first();
     }
 
     /**
@@ -99,7 +99,8 @@ class UserController extends Controller
         $user->save();
 
         $profile = Profile::firstOrNew(['user_id' => $user->id]);
-        $profile->callrail = $request->company;
+        $profile->company_name = $request->company['name'];
+        $profile->callrail = $request->company['id'];
         $profile->save();
 
         return $user;
