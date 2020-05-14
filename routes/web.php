@@ -18,6 +18,8 @@ Route::get('/', function () {
 });
 
 // Auth::routes();
+Auth::routes(['login' => false]);
+
 Route::post('/login', function( ){
     $email = \Request::get('email');
     $password = \Request::get('password');

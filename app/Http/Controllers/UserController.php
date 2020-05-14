@@ -50,6 +50,8 @@ class UserController extends Controller
             'notes' =>    'required'
         ]);
 
+        $request->password = bcrypt($request->password);
+
         $user = User::create($request->only(['name', 'email', 'password', 'notes']));
         return $user;
     }
@@ -109,11 +111,14 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
         //
+        $request->user()->tokens()->delete();
+
+        return response('Loggedout', 200);
     }
 }
