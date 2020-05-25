@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+Use Response;
 use App\User;
 use App\Profile;
 use Illuminate\Http\Request;
@@ -42,18 +43,23 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email',
-            'password' => 'required|min:5',
-            'notes' =>    'required'
-        ]);
-
-        $request->password = bcrypt($request->password);
-
-        $user = User::create($request->only(['name', 'email', 'password', 'notes']));
-        return $user;
+        try {
+            $request->validate([
+                'name' => 'required',
+                'email' => 'required|email|unique:users',
+                'password' => 'required|min:5',
+                'notes' =>    'required'
+            ]);
+    
+            // $request->password = bcrypt($request->password);
+    
+            $user = User::create($request->only(['name', 'email', bcrypt('password'), 'notes']));
+            return $user;
+        } catch(\Illuminate\Database\QueryException $e) {
+            return response()->json([
+                'errors' => $e,
+              ],422);
+        }
     }
 
     /**
