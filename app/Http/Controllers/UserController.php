@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-Use Response;
+use Response;
 use App\User;
 use App\Profile;
+use App\Events\NewUserRegistered;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -53,8 +54,29 @@ class UserController extends Controller
     
             // $request->password = bcrypt($request->password);
     
-            $user = User::create($request->only(['name', 'email', bcrypt('password'), 'notes']));
+            // $user = User::create($request->only(['name', 'email', bcrypt('password'), 'notes']));
+            $user = new User();
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->password = bcrypt($request->password);
+            $user->notes = $request->notes;
+            $user->is_approved = 1;
+            $user->save();
+            // $user->profile->company_name = $request->company['name'];
+            // $user->profile->callrail = $request->company['id'];            
+            // $user->push();
+            
+            $user->plain_password = $request->password;
+
+            $profile = Profile::firstOrNew(['user_id' => $user->id]);
+            $profile->company_name = $request->company['name'];
+            $profile->callrail = $request->company['id'];
+            $profile->save();
+                        
+            event(new NewUserRegistered($user));
+
             return $user;
+
         } catch(\Illuminate\Database\QueryException $e) {
             return response()->json([
                 'errors' => $e,

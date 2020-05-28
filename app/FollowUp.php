@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Profile extends Model
+class FollowUp extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -12,11 +12,11 @@ class Profile extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'callrail', 'facebook', 'company_name'
+        'lead_id', 'text'
     ];
-
-    public function user()
+   
+    public function lead()
     {
-        return $this->belongsTo(User::class);
-    }
+        return $this->belongsTo(Lead::class);
+    }    
 }
