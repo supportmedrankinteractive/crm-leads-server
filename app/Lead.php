@@ -19,4 +19,14 @@ class Lead extends Model
     {
         return $this->hasMany(FollowUp::class, 'lead_id');
     }
+
+    public function profile()
+    {
+        return $this->belongsTo(Profile::class);
+    }
+
+    public function platform()
+    {
+        return $this->belongsTo(Platform::class);
+    }    
 }

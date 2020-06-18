@@ -79,8 +79,8 @@ class UserController extends Controller
 
         } catch(\Illuminate\Database\QueryException $e) {
             return response()->json([
-                'errors' => $e,
-              ],422);
+                        'errors' => $e,
+                    ], 422);
         }
     }
 
