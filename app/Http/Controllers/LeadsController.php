@@ -63,7 +63,6 @@ class LeadsController extends Controller
             ]);
 
             
-
             foreach(json_decode($request->callrailResponse) as $content) {
                 $lead = new Lead();
                 // $profile = Profile::
