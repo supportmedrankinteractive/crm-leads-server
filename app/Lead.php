@@ -15,6 +15,8 @@ class Lead extends Model
         'profile_id', 'platform_id', 'content'
     ];
 
+    protected $with = ['follow_ups'];
+
     public function follow_ups()
     {
         return $this->hasMany(FollowUp::class, 'lead_id');

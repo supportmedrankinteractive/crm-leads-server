@@ -62,13 +62,15 @@ class LeadsController extends Controller
                 'status'    =>  'required',
             ]);
 
-            
+            $status = ['New Patient', 'Existing Patient'];
+            $randStatus = array_rand($status);
+
             foreach(json_decode($request->callrailResponse) as $content) {
                 $lead = new Lead();
                 // $profile = Profile::
                 $lead->profile_id = $request->profile_id;
                 $lead->platform_id = $request->platform_id;
-                $lead->status = $request->status;
+                $lead->status = $randStatus = rand(0, 1) ? 'New Patient' : 'Existing Patient';
                 $lead->content = json_encode($content);
                 $lead->save();
                 array_push($leads, json_encode($content));
@@ -78,8 +80,8 @@ class LeadsController extends Controller
 
         } catch(\Illuminate\Database\QueryException $e) {
             return response()->json([
-                    'errors' => $e,
-                ], 422);
+                'errors' => $e,
+            ], 422);
         }
 
     }
@@ -115,7 +117,12 @@ class LeadsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // temporary method for updating lead's status. Maybe create a new controller?
+        $lead = Lead::find($id);
+        $lead->status = $request->status;
+        $lead->save();
+
+        return $lead;
     }
 
     /**

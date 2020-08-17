@@ -28,3 +28,4 @@ Route::middleware('auth:sanctum')->post('/logout', function (Request $request) {
 // Route::apiResource('users', 'UserController')->middleware('auth:sanctum');
 Route::apiResource('users', 'UserController');
 Route::apiResource('leads', 'LeadsController');
+Route::apiResource('follow-ups', 'FollowUpController');

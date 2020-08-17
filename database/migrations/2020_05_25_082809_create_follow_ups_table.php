@@ -17,6 +17,7 @@ class CreateFollowUpsTable extends Migration
             $table->id();
             $table->foreignId('lead_id');
             $table->string('text', 100);
+            $table->dateTimeTz('date_at', 0);
             $table->timestamps();
         });
     }
