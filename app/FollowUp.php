@@ -13,7 +13,7 @@ class FollowUp extends Model
      * @var array
      */
     protected $fillable = [
-        'lead_id', 'text', 'date_at'
+        'lead_id', 'text', 'date_at', 'order'
     ];
    
     public function lead()

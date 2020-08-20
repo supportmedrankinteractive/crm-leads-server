@@ -30,6 +30,7 @@ class FollowUpController extends Controller
             $request->validate([
                 'lead_id'    =>  'required',
                 'text'    =>  'required',
+                'order' =>  'required',
                 'date_at'    =>  'required',
             ]);        
     
