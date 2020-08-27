@@ -30,7 +30,8 @@ Route::apiResource('users', 'UserController');
 Route::apiResource('leads', 'LeadsController');
 Route::apiResource('follow-ups', 'FollowUpController');
 
-Route::post('/webhook/callrail/{profile?}', function( $profile, Request $request ){
-    $request->request->add(['profile' => $profile]);
-    return $request->all();
-});
+// Route::post('/webhook/callrail/{profile?}', function( $profile, Request $request ){
+//     $request->request->add(['profile' => $profile]);
+//     return $request->all();
+// });
+Route::post('/webhook/callrail/{profile?}', 'Webhooks/CallrailController');
