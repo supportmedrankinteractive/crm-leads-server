@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Webhooks;
 
 use App\Lead;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class CallrailController extends Controller
 {
