@@ -39,3 +39,7 @@ Route::post('/login', function( ){
 });
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::post('/webhook/callrail', function( Request $request ){
+    return $request->all();
+});

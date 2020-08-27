@@ -29,3 +29,8 @@ Route::middleware('auth:sanctum')->post('/logout', function (Request $request) {
 Route::apiResource('users', 'UserController');
 Route::apiResource('leads', 'LeadsController');
 Route::apiResource('follow-ups', 'FollowUpController');
+
+Route::post('/webhook/callrail/{profile?}', function( $profile, Request $request ){
+    $request->request->add(['profile' => $profile]);
+    return $request->all();
+});

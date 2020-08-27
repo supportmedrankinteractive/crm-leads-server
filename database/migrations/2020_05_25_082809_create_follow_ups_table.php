@@ -16,7 +16,7 @@ class CreateFollowUpsTable extends Migration
         Schema::create('follow_ups', function (Blueprint $table) {
             $table->id();
             $table->foreignId('lead_id');
-            $table->string('text', 100);
+            $table->text('text');
             $table->dateTimeTz('date_at', 0);
             $table->timestamps();
         });
