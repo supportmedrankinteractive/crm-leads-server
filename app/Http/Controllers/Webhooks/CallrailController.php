@@ -39,10 +39,10 @@ class CallrailController extends Controller
             $lead->status = $randStatus = rand(0, 1) ? 'New Patient' : 'Existing Patient';
             $lead->content = $content;
             $lead->save();
-            event(new CallRailWebHookMail($lead));
+            // event(new CallRailWebHookMail($lead));
             return response()->json(["lead" => $lead], 201); 
         } catch(\Illuminate\Database\QueryException $e) {
-            event(new CallRailWebHookMail($e));
+            // event(new CallRailWebHookMail($e));
             return response()->json([
                 'errors' => $e,
             ], 422);
