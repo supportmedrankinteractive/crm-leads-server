@@ -42,7 +42,7 @@ class CallrailController extends Controller
             event(new CallRailWebHookMail($lead));
             return response()->json(["lead" => $lead], 201); 
         } catch(\Illuminate\Database\QueryException $e) {
-            event(new CallRailWebHookMail($lead));
+            event(new CallRailWebHookMail($e));
             return response()->json([
                 'errors' => $e,
             ], 422);
