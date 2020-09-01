@@ -18,6 +18,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\NewUserRegistered' => [
             'App\Listeners\SendEmailVerificationNotification',
         ],
+        'App\Events\CallRailWebHookMail' => [
+            'App\Listeners\WebHookCallRailMailFired',
+        ],        
     ];
 
     /**

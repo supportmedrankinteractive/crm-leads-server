@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Webhooks;
 
 use App\Lead;
 use Illuminate\Http\Request;
+use App\Events\CallRailWebHookMail;
 use App\Http\Controllers\Controller;
 
 class CallrailController extends Controller
@@ -36,12 +37,12 @@ class CallrailController extends Controller
             $lead->profile_id = $request->profile;
             $lead->platform_id = 1;
             $lead->status = $randStatus = rand(0, 1) ? 'New Patient' : 'Existing Patient';
-            $lead->content = json_encode($content);
+            $lead->content = $content;
             $lead->save();
-    
+            event(new CallRailWebHookMail($lead));
             return response()->json(["lead" => $lead], 201); 
         } catch(\Illuminate\Database\QueryException $e) {
-            mail('valencia.dominic.29@gmail.com', 'Callrail Webhook Error', $e);
+            event(new CallRailWebHookMail($lead));
             return response()->json([
                 'errors' => $e,
             ], 422);
