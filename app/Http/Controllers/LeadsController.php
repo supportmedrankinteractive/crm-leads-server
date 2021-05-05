@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Lead;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class LeadsController extends Controller
@@ -19,8 +20,57 @@ class LeadsController extends Controller
      */
     public function index()
     {
+        // return $date_from = Carbon::now()->subDays(300)->format('yy-m-d');
+        // return Carbon::parse('last year')->startOfYear()->format('Y-m-d H:i:s');//Carbon::now()->format('Y-m-d');
+        if(request()->date == 'today') {
+            // return 2;
+            $date_from = Carbon::today();
+            $date_to = Carbon::tomorrow();
+        } else if(request()->date == 'yesterday') {
+            // return 2;
+            $date_from = Carbon::yesterday();
+            $date_to = Carbon::today();
+        } else if(request()->date == 'last_7_days') {
+            // return 2;
+            $date_from = Carbon::now()->subDays(7);
+            $date_to = Carbon::tomorrow();
+        } else if(request()->date == 'last_30_days') {
+            // return 2;
+            $date_from = Carbon::now()->subDays(30);
+            $date_to = Carbon::tomorrow();
+        } else if(request()->date == 'this_month') {
+            // return 2;
+            $date_from = Carbon::now()->startOfMonth();
+            $date_to = Carbon::now()->endOfMonth();
+        } else if(request()->date == 'last_month') {
+            // return 2;
+            $date_from = Carbon::parse('last month')->startOfMonth();
+            $date_to = Carbon::parse('last month')->endOfMonth();
+        } else if(request()->date == 'this_year') {
+            // return 2;
+            $date_from = Carbon::parse('this year')->startOfYear();
+            $date_to = Carbon::parse('this year')->endOfYear();
+        } else if(request()->date == 'last_year') {
+            // return 2;
+            $date_from = Carbon::parse('last year')->startOfYear();
+            $date_to = Carbon::parse('last year')->endOfYear();
+        } else if(request()->date == 'all_time') {
+            // return 2;
+            $date_from = Carbon::now()->subDays(300);
+            $date_to = Carbon::now();
+        }
+        // return request()->date.' - '.$date_from->format('Y-m-d H:i:s') .' - '.$date_to->format('Y-m-d H:i:s');
         // return User::with('profile.leads')->where('is_admin', '!=', 1)->get();
-        return auth()->user()->profile->leads;
+        // $leads = auth()->user()->profile->leads;
+
+        $leads = Lead::where('profile_id', auth()->user()->profile->id)
+            ->whereBetween('start_time', [
+                $date_from->format('Y-m-d H:i:s'),
+                $date_to->format('Y-m-d H:i:s')
+            ])
+            ->get();
+
+        return $leads;
     }
 
     /**
@@ -71,6 +121,8 @@ class LeadsController extends Controller
                 $lead->profile_id = $request->profile_id;
                 $lead->platform_id = $request->platform_id;
                 $lead->status = $randStatus = rand(0, 1) ? 'New Patient' : 'Existing Patient';
+                // $lead->status = $content->tags[0]->name;
+                $lead->start_time =  Carbon::parse($content->start_time)->format('Y-m-d H:i:s');
                 $lead->content = json_encode($content);
                 $lead->save();
                 array_push($leads, json_encode($content));
