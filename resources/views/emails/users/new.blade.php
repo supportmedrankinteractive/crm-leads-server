@@ -1,7 +1,7 @@
 @component('mail::message')
 # Welcome  to our MED RANK CRM!
 
-We have created an account for you and you are assigned to {{ $user->profile }}
+We have created an account for you and you are assigned to {{ $user->profile->company_name }}
 Your account details are below:
 {{ $user->email }}
 {{ $user->plain_password }}
