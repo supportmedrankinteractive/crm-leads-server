@@ -6,6 +6,7 @@ use App\Lead;
 use Illuminate\Http\Request;
 use App\Events\CallRailWebHookMail;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Log;
 
 class CallrailController extends Controller
 {
@@ -39,10 +40,12 @@ class CallrailController extends Controller
             $lead->status = $randStatus = rand(0, 1) ? 'New Patient' : 'Existing Patient';
             $lead->content = $content;
             $lead->save();
+            Log::info('Lead added from webhook: ' . $lead);
             // event(new CallRailWebHookMail($lead));
             return response()->json(["lead" => $lead], 201); 
         } catch(\Illuminate\Database\QueryException $e) {
             // event(new CallRailWebHookMail($e));
+            Log::info('Lead creation failed');
             return response()->json([
                 'errors' => $e,
             ], 422);
