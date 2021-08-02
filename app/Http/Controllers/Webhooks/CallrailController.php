@@ -39,7 +39,7 @@ class CallrailController extends Controller
             $lead->profile_id = $request->profile;
             $lead->platform_id = 1;
             $lead->status = $randStatus = rand(0, 1) ? 'New Patient' : 'Existing Patient';
-            $lead->start_time =  Carbon::parse($content->start_time)->format('Y-m-d H:i:s');
+            $lead->start_time =  Carbon::parse(json_encode($content)->start_time)->format('Y-m-d H:i:s');
             $lead->content = $content;
             $lead->save();
             Log::info('Lead added from webhook: ' . $lead);
