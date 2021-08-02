@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Events\CallRailWebHookMail;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 class CallrailController extends Controller
 {
