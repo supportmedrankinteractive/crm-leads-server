@@ -43,12 +43,14 @@ class CallrailController extends Controller
             $lead->start_time =  Carbon::parse(json_decode($content)->start_time)->format('Y-m-d H:i:s');
             $lead->content = $content;
             $lead->save();
-            Log::info('Lead added from webhook: ' . $lead);
+            Log::info('Lead added from webhook:');
+            Log::debug($lead);
             // event(new CallRailWebHookMail($lead));
             return response()->json(["lead" => $lead], 201); 
         } catch(\Illuminate\Database\QueryException $e) {
             // event(new CallRailWebHookMail($e));
             Log::info('Lead creation failed');
+            Log::debug($e);
             return response()->json([
                 'errors' => $e,
             ], 422);
